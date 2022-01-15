@@ -1,6 +1,7 @@
 package com.hirekarma.service;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import javax.mail.MessagingException;
@@ -91,5 +92,79 @@ public class EmailSenderService {
 		Logger.info("Mail Sended Sussessfully With Attachment...");
 		
 	}
+	
+	public void SendEmailListWithAttachment(
+			List<String> toEmail,
+			String body, 
+			String subject, 
+			String attachment) throws MessagingException, IOException{
+		
+		Logger.info("Inside SendEmailWithAttachment() Method...");
+		
+		MimeMessage message = mailSender.createMimeMessage();
+		
+		MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message, true);
+		try {
+		mimeMessageHelper.setFrom("heydarlinglisten@gmail.com");
+		mimeMessageHelper.setText(body);
+		mimeMessageHelper.setSubject(subject);
+		
+		FileSystemResource fileSystemResource = new FileSystemResource(new File(attachment));
+		
+		mimeMessageHelper.addAttachment(fileSystemResource.getFilename(), fileSystemResource);
+		
+		for(String mail : toEmail)
+		{
+			mimeMessageHelper.setTo(mail);
+			mailSender.send(message);
+		}
+		
+		mailSender.send(message);
+		
+		Logger.info("Attachment Mail Sended Sussessfully...");
+		} catch (MessagingException e) {
+            e.printStackTrace();
+        }
+		
+	}
+	
+	public void sendHiringMeetEmail(
+			List<String> toEmail,
+//			String body, 
+			String subject, 
+			String attachment) throws MessagingException, IOException{
+		
+		Logger.info("Inside sendHiringMeetEmail() Method...");
+		
+		MimeMessage message = mailSender.createMimeMessage();
+		
+		MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message, true);
+		String body = "<h2>Hey Congrats !!</h2><br>"
+				+ " <h3>Please Join On Above Link For Further Process . . .</h3><br><br>"
+				+ "<a href='https://www.google.com/'><h3><b>link is here</b></h3></a>";
+		try {
+		mimeMessageHelper.setFrom("heydarlinglisten@gmail.com");
+		mimeMessageHelper.setText(body, true);
+		mimeMessageHelper.setSubject(subject);
+		
+		FileSystemResource fileSystemResource = new FileSystemResource(new File(attachment));
+		
+		mimeMessageHelper.addAttachment(fileSystemResource.getFilename(), fileSystemResource);
+		
+		for(String mail : toEmail)
+		{
+			mimeMessageHelper.setTo(mail);
+			mailSender.send(message);
+		}
+		
+		mailSender.send(message);
+		
+		Logger.info("sendHiringMeetEmail Sended Sussessfully...");
+		} catch (MessagingException e) {
+            e.printStackTrace();
+        }
+		
+	}
+
 
 }

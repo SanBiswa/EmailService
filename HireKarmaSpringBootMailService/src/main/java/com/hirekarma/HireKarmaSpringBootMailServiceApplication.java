@@ -1,5 +1,6 @@
 package com.hirekarma;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,8 +26,9 @@ public class HireKarmaSpringBootMailServiceApplication {
 	}
 	
 	@EventListener(ApplicationReadyEvent.class)
-	public void sendMail() throws MessagingException {
+	public void sendMail() throws MessagingException, IOException {
 		List<String> mail=Arrays.asList("sanbiswa22@gmail.com", "user8is2unknown@gmail.com");
+		//mailSender.sendHiringMeetEmail(mail,"Congratulations !!","C:\\Users\\biswa.sahoo\\Desktop\\\\FIELS\\EXT DRM IMG\\uniform.jpeg");
 		//mailSender.SendEmailWithoutAttachment("sanbiswa22@gmail.com","Welcome To HireKarma Dear !!","Hire Karma");
 		//mailSender.SendEmailWithoutAttachmentList(mail, "List Mail Checking Successfull . . .","Mail Check");
 		//mailSender.SendEmailWithAttachment("sanbiswa22@gmail.com","Dress Should Be Properly Maintain By All Students","Use Proper Uniform","C:\\Users\\biswa.sahoo\\Desktop\\FIELS\\EXT DRM IMG\\uniform.jpeg");

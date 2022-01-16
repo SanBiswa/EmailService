@@ -10,11 +10,14 @@ import javax.mail.internet.MimeMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+
+import com.hirekarma.beans.UserBean;
 
 @Service
 public class EmailSenderService {
@@ -24,7 +27,10 @@ public class EmailSenderService {
 	@Autowired
 	public JavaMailSender mailSender;
 	
-	public void SendEmailWithoutAttachment(
+	@Value("${spring.mail.username}")
+	private String from;
+	
+	public void sendEmailWithoutAttachment(
 			String toEmail,
 			String body, 
 			String subject){
@@ -43,7 +49,7 @@ public class EmailSenderService {
 		
 	}
 	
-	public void SendEmailWithoutAttachmentList(
+	public void sendEmailWithoutAttachmentList(
 			List<String> toEmail,
 			String body, 
 			String subject){
@@ -65,8 +71,23 @@ public class EmailSenderService {
 		
 	}
 	
+   public void sendEmailWithoutAttachmentList(List<UserBean> students){
+		
+		Logger.info("Inside SendEmailWithoutAttachmentList() Method...");
+		SimpleMailMessage mailMessage = new SimpleMailMessage();
+		for(UserBean student : students)
+		{
+			mailMessage.setFrom(from);
+			mailMessage.setText("Dear "+student.getName()+", Your login id is: "+student.getEmail()+" and password is: "+student.getPassword());
+			mailMessage.setSubject("You're in!! Let's get started");
+			mailMessage.setTo(student.getEmail());
+			mailSender.send(mailMessage);
+		}
+		Logger.info("MailList Sended Sussessfully WithOut Attachment...");
+	}
 	
-	public void SendEmailWithAttachment(
+	
+	public void sendEmailWithAttachment(
 			String toEmail,
 			String body, 
 			String subject, 
@@ -93,7 +114,7 @@ public class EmailSenderService {
 		
 	}
 	
-	public void SendEmailListWithAttachment(
+	public void sendEmailListWithAttachment(
 			List<String> toEmail,
 			String body, 
 			String subject, 
